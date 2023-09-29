@@ -114,6 +114,7 @@ game.onUpdate(function () {
     } else {
         ball.setVelocity(0, 0)
         aim_sprite.setFlag(SpriteFlag.Invisible, false)
+        aiming()
         ball.sayText(shot_power)
     }
     slow_down()

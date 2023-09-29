@@ -10,12 +10,6 @@
         "tilemapTile": true,
         "displayName": "rough"
     },
-    "tile2": {
-        "data": "hwQQABAAAAB3d/f//393d3f2/////393V////////3f3////////f/f///////9/////////////////////////////////////////////////////////////////9////////3/3////////f3f///////93d/f/////f3d3d/f//393dw==",
-        "mimeType": "image/x-mkcd-f4",
-        "tilemapTile": true,
-        "displayName": "spawn"
-    },
     "tile3": {
         "data": "hwQQABAAAAB3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dw==",
         "mimeType": "image/x-mkcd-f4",
