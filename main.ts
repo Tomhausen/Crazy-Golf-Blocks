@@ -12,6 +12,20 @@ function path_move_y () {
         tiles.setTileAt(tiles.getTileLocation(temp_column, row), assets.tile`path`)
     }
 }
+function pathing () {
+    direction = spriteutils.degreesToRadians(transformSprites.getRotation(aim_sprite))
+    x_vector = Math.sin(direction)
+    y_vector = Math.cos(direction) * -1
+    aim_image = image.create(2, 2)
+    aim_image.fill(15)
+    for (let index = 0; index < 20; index++) {
+        dot = sprites.create(aim_image, SpriteKind.path)
+        dot.setPosition(aim_sprite.x, aim_sprite.y)
+        for (let index = 0; index < shot_power / 5; index++) {
+            move()
+        }
+    }
+}
 function path_move_x () {
     column += 1
     for (let index = 0; index <= 2; index++) {
@@ -67,20 +81,6 @@ function generate_path () {
     tiles.placeOnTile(hole, tile)
     tilesAdvanced.setWallOnTilesOfType(assets.tile`rough`, true)
 }
-function path () {
-    direction = spriteutils.degreesToRadians(transformSprites.getRotation(aim_sprite))
-    x_vector = Math.sin(direction)
-    y_vector = Math.cos(direction) * -1
-    aim_image = image.create(2, 2)
-    aim_image.fill(15)
-    for (let index = 0; index < 20; index++) {
-        dot = sprites.create(aim_image, SpriteKind.path)
-        dot.setPosition(aim_sprite.x, aim_sprite.y)
-        for (let index = 0; index < shot_power / 5; index++) {
-            move()
-        }
-    }
-}
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (ball, hole) {
     if (spriteutils.distanceBetween(ball, hole) < 7) {
         ball.setVelocity(0, 0)
@@ -108,13 +108,13 @@ function move () {
         aim_sprite.y += y_vector
     }
 }
+let tile: tiles.Location = null
+let temp_row = 0
 let dot: Sprite = null
 let aim_image: Image = null
 let y_vector = 0
 let x_vector = 0
-let tile: tiles.Location = null
 let direction = 0
-let temp_row = 0
 let column = 0
 let temp_column = 0
 let row = 0
@@ -150,7 +150,7 @@ game.onUpdate(function () {
     } else {
         ball.setVelocity(0, 0)
         aiming()
-        path()
+        pathing()
         ball.sayText(shot_power)
     }
     slow_down()
