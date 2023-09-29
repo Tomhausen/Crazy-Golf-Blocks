@@ -1,5 +1,6 @@
 namespace SpriteKind {
     export const aim = SpriteKind.create()
+    export const path = SpriteKind.create()
 }
 function path_move_y () {
     row += randint(0, 1) * 2
@@ -66,6 +67,20 @@ function generate_path () {
     tiles.placeOnTile(hole, tile)
     tilesAdvanced.setWallOnTilesOfType(assets.tile`rough`, true)
 }
+function path () {
+    direction = spriteutils.degreesToRadians(transformSprites.getRotation(aim_sprite))
+    x_vector = Math.sin(direction)
+    y_vector = Math.cos(direction) * -1
+    aim_image = image.create(2, 2)
+    aim_image.fill(15)
+    for (let index = 0; index < 20; index++) {
+        dot = sprites.create(aim_image, SpriteKind.path)
+        dot.setPosition(aim_sprite.x, aim_sprite.y)
+        for (let index = 0; index < shot_power / 5; index++) {
+            move()
+        }
+    }
+}
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (ball, hole) {
     if (spriteutils.distanceBetween(ball, hole) < 7) {
         ball.setVelocity(0, 0)
@@ -81,6 +96,22 @@ function setup_level () {
 function check_if_moving () {
     is_moving = Math.abs(ball.vx) > 5 || Math.abs(ball.vy) > 5
 }
+function move () {
+    aim_sprite.x += x_vector
+    if (tiles.tileAtLocationIsWall(aim_sprite.tilemapLocation())) {
+        x_vector = x_vector * -1
+        aim_sprite.x += x_vector
+    }
+    aim_sprite.y += y_vector
+    if (tiles.tileAtLocationIsWall(aim_sprite.tilemapLocation())) {
+        y_vector = y_vector * -1
+        aim_sprite.y += y_vector
+    }
+}
+let dot: Sprite = null
+let aim_image: Image = null
+let y_vector = 0
+let x_vector = 0
 let tile: tiles.Location = null
 let direction = 0
 let temp_row = 0
@@ -102,19 +133,24 @@ ball.setBounceOnWall(true)
 ball.scale = 2 / 3
 ball.z = 5
 hole = sprites.create(assets.image`hole`, SpriteKind.Player)
-let aim_image = image.create(150, 150)
-aim_image.fillRect(74, 0, 2, 75, 15)
-aim_sprite = sprites.create(aim_image, SpriteKind.aim)
+aim_sprite = sprites.create(assets.image`ball`, SpriteKind.aim)
+aim_sprite.setFlag(SpriteFlag.GhostThroughWalls, true)
+aim_sprite.setFlag(SpriteFlag.Invisible, true)
 setup_level()
 game.onUpdate(function () {
+	
+})
+game.onUpdate(function () {
+    if (sprites.allOfKind(SpriteKind.path).length > 1) {
+        sprites.destroyAllSpritesOfKind(SpriteKind.path)
+    }
     check_if_moving()
     if (is_moving) {
-        aim_sprite.setFlag(SpriteFlag.Invisible, true)
         ball.sayText("")
     } else {
         ball.setVelocity(0, 0)
-        aim_sprite.setFlag(SpriteFlag.Invisible, false)
         aiming()
+        path()
         ball.sayText(shot_power)
     }
     slow_down()
